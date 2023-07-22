@@ -1,0 +1,103 @@
+<div class="mat-headline-4">Nested Form Example</div>
+
+<p>
+  {{ nestedFormGroup.value | json }}
+</p>
+
+<p>
+  {{ occupationNameFormGroup.value | json }}
+</p>
+
+<form class="form-container" [formGroup]="nestedFormGroup">
+  <div class="input-container">
+    <h1 class="mat-header-6">Personal Information</h1>
+
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+
+      <input
+        matInput
+        type="text"
+        placeholder="Enter your name"
+        formControlName="name"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+
+      <input
+        matInput
+        type="email"
+        placeholder="Enter your email address"
+        formControlName="email"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Age</mat-label>
+
+      <input
+        matInput
+        type="number"
+        placeholder="Enter your email address"
+        formControlName="age"
+      />
+    </mat-form-field>
+
+    <mat-divider></mat-divider>
+
+    <div class="occupations-container">
+      <h1 class="mat-header-6">Occupations</h1>
+
+      <mat-chip-listbox class="occupations-chips-container">
+        <mat-chip-row
+          *ngFor="
+            let occupation of nestedFormGroup.value.occupations;
+            let index = index
+          "
+          (removed)="removeOccupation(index)"
+          [editable]="true"
+          (edited)="editOccupation(index, $event.value)"
+        >
+          {{ occupation }}
+
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      </mat-chip-listbox>
+
+      <form
+        class="occupations-form-container"
+        [formGroup]="occupationNameFormGroup"
+        (ngSubmit)="createOccupation()"
+      >
+        <mat-form-field>
+          <mat-label>Occupation Name</mat-label>
+
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="occupationNameFormGroup.invalid"
+        >
+          Add occupation
+        </button>
+      </form>
+    </div>
+
+    <mat-divider></mat-divider>
+  </div>
+
+  <button
+    mat-raised-button
+    color="accent"
+    type="submit"
+    [disabled]="nestedFormGroup.invalid"
+  >
+    Submit Form!
+  </button>
+</form>
